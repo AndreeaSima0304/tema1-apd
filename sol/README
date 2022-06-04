@@ -1,0 +1,20 @@
+/* SIMA ANDREEA 335CA */
+
+Pentru a putea realiza paralelizarea si pentru a nu folosi variabile globale, am creat o structura 
+ThreadArguments in care am pus parametrii functiei run_genetic_algorithm si alte variabile de care 
+aveam nevoie, de exemplu id-ul thread-urilor, bariera si numarul de thread-uri. Am trimis ca unic 
+parametru functiei run_genetic_algorithm o structura de tip ThreadArguments, pentru a putea calcula 
+variabilele de care am nevoie.
+ 
+Cu formulele de start si end am paralelizat functia run_genetic_algorithm (toate for-urile),
+iar functiile care printeaza sunt executate doar de thread-ul 0 pentru a afisa o singura data.
+Nu am paralelizat for-ul dupa numarul de generatii, pentru ca acestea nu pot fi executate in paralel,
+fiind nevoie de finalizarea generatiei curente pentru a calcula generatia urmatoare.
+
+Pentru a eficientiza programul si a observa diferenta de timp intre numarul de thread-uri am calculat 
+suma cromozomilor fiecarui element din generatia curenta in functia run_genetic_algorithm inainte de 
+a apela qsort (qsort foloseste functia cmp), suma care era calculata in programul secvential in 
+functia cmp, operatie care era foarte costisitoare.
+
+Functia de qsort este realizata doar de thread-ul 0 pentru a nu mari timpul de rulare al programului
+si dam free la generatii tot pe thread-ul 0 pentru ca acest lucru trebuie facut o singura data.
